@@ -8,11 +8,9 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 
-//View engine
-app.set('view engine', 'ejs')
+
 //Middleware
 app.use(express.json())
-app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true })) //for accepting form data
 
 
@@ -40,28 +38,28 @@ const connectDB = async ()=> {
 }) */
 
 //Routes
-app.get('/', (req, res)=>{
-    Job.find().sort({ createdAT : -1 })
+app.get('/job', (req, res)=>{
+    Job.find().sort({ createdAt : -1 })
         .then((result) => {
-            res.render('index', {title: 'All Jobs', jobs: result })
+            res.send(result)
         })
         .catch(err => { console.log(err) })
 })
 
-//get form page
-app.get('/add-job', (req, res) => {
-    res.render('create', {title : 'Add new job'})
-})
-
-//form action
 app.post('/add-job', (req, res) => {    
     const job = new Job(req.body)
     job.save()
-        .then((result) => { res.redirect('/') })
-        .catch(err => { console.log(err)})
+        .then((result) => { res.send({job, message: 'Sucessfully added'}) })
+        .catch(err => { res.send(err)})
 })
 
+app.delete('/delete-job/:id', (req,res) => {
+    const id = req.params.id
 
+    Job.findByIdAndDelete(id)
+    .then((result) => { res.send("Sucessfully deleted")})
+    .catch(err => { res.send(err)})
+})
 
 connectDB().then(() => {
     app.listen(PORT, () => {
