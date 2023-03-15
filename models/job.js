@@ -7,16 +7,17 @@ const jobSchema = new Schema({
         type: 'string',
         required: true
     },
-    description :{
+    desc :{
         type: 'string',
-        required: true
-    },
-    tag: {
-        type: 'array',
         required: true
     },
     link:{
         type: 'string',
+        required: true
+    },
+    tag: {
+        type: Array,
+        default : [],
         required: true
     }
 }, {timestamps: true})

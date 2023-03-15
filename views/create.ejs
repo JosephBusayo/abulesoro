@@ -1,0 +1,30 @@
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="create-job content">
+    <form action="/add-job" method="POST">
+      <label for="title">Job title:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="desc">Job desc:</label>
+      <input type="text" id="desc" name="desc" required>
+
+      <label for="link">Job link:</label>
+      <input type="text" id="link" name="link" required/>
+
+      <label for="tag">Select tags:</label>
+      <select name="tag" id="tag" multiple>
+        <option value="remote">100% Remote</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="fulltime">Fulltime</option>
+      </select>
+
+      <button>Submit</button>
+    </form>
+  </div>
+
+  <%- include("./partials/footer.ejs") %>
+</body>
+</html>
