@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
-const Job = require('./models/job');
+const jobRoute = require('./routes/jobRoutes')
 
 
 const app = express()
@@ -25,6 +25,16 @@ const connectDB = async ()=> {
 }
 
 
+app.use('/api/v1', jobRoute)
+
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Listening on port ${PORT}`)
+    })
+})
+
+
 /* app.get('/add-job', (req, res) => {
     const job = new Job({
         title: 'Job 1',
@@ -36,33 +46,3 @@ const connectDB = async ()=> {
         .then((result) => { res.send(result) })
         .catch((err) => { console.log(err) })
 }) */
-
-//Routes
-app.get('/job', (req, res)=>{
-    Job.find().sort({ createdAt : -1 })
-        .then((result) => {
-            res.send(result)
-        })
-        .catch(err => { console.log(err) })
-})
-
-app.post('/add-job', (req, res) => {    
-    const job = new Job(req.body)
-    job.save()
-        .then((result) => { res.send({job, message: 'Sucessfully added'}) })
-        .catch(err => { res.send(err)})
-})
-
-app.delete('/delete-job/:id', (req,res) => {
-    const id = req.params.id
-
-    Job.findByIdAndDelete(id)
-    .then((result) => { res.send("Sucessfully deleted")})
-    .catch(err => { res.send(err)})
-})
-
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Listening on port ${PORT}`)
-    })
-})
